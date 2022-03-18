@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NoIntro\Model\Game;
 
+use NoIntro\Model\Dat;
 use NoIntro\Model\Game;
 use NoIntro\Model\Rom;
 
@@ -14,6 +15,8 @@ abstract class AbstractGame implements Game
     protected string $description;
 
     protected Rom $rom;
+
+    protected Dat $dat;
 
     public function getName(): string
     {
@@ -28,5 +31,10 @@ abstract class AbstractGame implements Game
     public function getRom(): Rom
     {
         return $this->rom;
+    }
+
+    public function getDat(): Dat
+    {
+        return $this->dat;
     }
 }

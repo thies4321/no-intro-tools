@@ -15,6 +15,9 @@ use function sprintf;
 
 final class DatParser
 {
+    /**
+     * @throws DatFileNotFound
+     */
     public function parseDat(string $name): array
     {
         $filePath = sprintf('%s/../../resources/%s.dat', __DIR__, $name);

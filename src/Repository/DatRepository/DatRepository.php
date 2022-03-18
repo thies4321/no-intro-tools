@@ -6,16 +6,34 @@ namespace NoIntro\Repository\DatRepository;
 
 use NoIntro\Exception\DatFileNotFound;
 use NoIntro\Model\Dat;
+use NoIntro\Repository\AbstractRepository;
 use NoIntro\Repository\DatRepository as DatRepositoryInterface;
 
+use function explode;
 use function file_exists;
 use function in_array;
 use function pathinfo;
 use function scandir;
 use function sprintf;
 
-final class DatRepository extends AbstractDatRepository implements DatRepositoryInterface
+use const PATHINFO_FILENAME;
+
+final class DatRepository extends AbstractRepository implements DatRepositoryInterface
 {
+    protected function buildArray(array $data): array
+    {
+        $authors = explode(', ', $data['header']['author'] ?? '');
+
+        return [
+            'name' => $data['header']['name'] ?? '',
+            'description' => $data['header']['description'] ?? '',
+            'version' => $data['header']['version'] ?? '',
+            'authors' => $authors,
+            'homepage' => $data['header']['homepage'] ?? '',
+            'url' => $data['header']['url'] ?? ''
+        ];
+    }
+
     /**
      * @throws DatFileNotFound
      */

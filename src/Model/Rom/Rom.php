@@ -25,4 +25,16 @@ final class Rom extends AbstractRom implements RomInterface
         $this->serial = $serial;
         $this->status = $status;
     }
+
+    public static function fromArray(array $rom)
+    {
+        return new self(
+            (string) $rom['name'],
+            (int) $rom['size'],
+            (string) $rom['crc'],
+            (string) $rom['md5'],
+            (string) $rom['sha1'],
+            $rom['status'] ?? null
+        );
+    }
 }

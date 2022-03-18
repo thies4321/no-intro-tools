@@ -11,4 +11,6 @@ interface Game
     public function getDescription(): string;
 
     public function getRom(): Rom;
+
+    public function getDat(): Dat;
 }

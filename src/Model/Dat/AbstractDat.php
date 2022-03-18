@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace NoIntro\Model\Dat;
 
 use NoIntro\Model\Dat;
