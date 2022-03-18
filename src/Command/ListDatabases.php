@@ -14,7 +14,7 @@ use function sprintf;
     description: 'List all no-intro databases',
     hidden: false
 )]
-class ListDatabases extends Command
+final class ListDatabases extends Command
 {
     private DatRepository $datRepository;
 
