@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+use NoIntro\Repository\DatRepository\DatRepository;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$datRepository = new DatRepository();
+$dats = $datRepository->findAll();
+
+foreach ($dats as $dat) {
+    echo sprintf('Name: %s', $dat->getName()) . PHP_EOL;
+    echo sprintf('Version: %s', $dat->getVersion()) . PHP_EOL;
+    echo PHP_EOL;
+}

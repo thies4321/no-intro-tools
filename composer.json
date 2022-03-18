@@ -11,6 +11,7 @@
   "require": {
     "ext-simplexml": "*",
     "ext-libxml": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "symfony/console": "^6.0"
   }
 }

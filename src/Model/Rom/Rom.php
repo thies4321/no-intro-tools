@@ -34,6 +34,7 @@ final class Rom extends AbstractRom implements RomInterface
             (string) $rom['crc'],
             (string) $rom['md5'],
             (string) $rom['sha1'],
+            $rom['serial'] ?? null,
             $rom['status'] ?? null
         );
     }

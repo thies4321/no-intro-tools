@@ -34,16 +34,17 @@ final class GameRepository extends AbstractRepository implements GameRepositoryI
 
     protected function buildArray(array $data): array
     {
-        $dat = $this->datRepository->getByName($data['datName']);
-
         return [
             'name' => $data['@attributes']['name'],
             'description' => $data['description'],
             'rom' => Rom::fromArray($data['rom']['@attributes']),
-            'dat' => $dat
+            'dat' => $data['dat']
         ];
     }
 
+    /**
+     * @throws DatFileNotFound
+     */
     public function getByName(string $name): ?Game
     {
         $dats = scandir(sprintf('%s/../../../resources', __DIR__));
@@ -54,12 +55,12 @@ final class GameRepository extends AbstractRepository implements GameRepositoryI
             }
 
             $datName = pathinfo($dat, PATHINFO_FILENAME);
-
             $data = $this->datParser->parseDat($datName);
+            $dat = $this->datRepository->getByName($datName);
 
             foreach ($data['game'] as $game) {
                 if ($game['@attributes']['name'] === $name) {
-                    $game['datName'] = $datName;
+                    $game['dat'] = $dat;
 
                     return Game\Game::fromArray($this->buildArray($game));
                 }
@@ -67,6 +68,197 @@ final class GameRepository extends AbstractRepository implements GameRepositoryI
         }
 
         return null;
+    }
+
+    /**
+     * @return Game[]
+     *
+     * @throws DatFileNotFound
+     */
+    public function findByName(string $name): array
+    {
+        $result = [];
+
+        $dats = scandir(sprintf('%s/../../../resources', __DIR__));
+
+        foreach ($dats as $dat) {
+            if (in_array($dat, ['.', '..'])) {
+                continue;
+            }
+
+            $datName = pathinfo($dat, PATHINFO_FILENAME);
+            $data = $this->datParser->parseDat($datName);
+            $dat = $this->datRepository->getByName($datName);
+
+            foreach ($data['game'] as $game) {
+                if ($game['@attributes']['name'] === $name) {
+                    $game['dat'] = $dat;
+
+                    $result[] = Game\Game::fromArray($this->buildArray($game));
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return Game[]
+     *
+     * @throws DatFileNotFound
+     */
+    public function findBySize(int $size): array
+    {
+        $result = [];
+
+        $dats = scandir(sprintf('%s/../../../resources', __DIR__));
+
+        foreach ($dats as $dat) {
+            if (in_array($dat, ['.', '..'])) {
+                continue;
+            }
+
+            $datName = pathinfo($dat, PATHINFO_FILENAME);
+            $data = $this->datParser->parseDat($datName);
+            $dat = $this->datRepository->getByName($datName);
+
+            foreach ($data['game'] as $game) {
+                if ($game['rom']['@attributes']['size'] === (string) $size) {
+                    $game['dat'] = $dat;
+
+                    $result[] = Game\Game::fromArray($this->buildArray($game));
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function getByCrc(string $crc): ?Game
+    {
+        $dats = scandir(sprintf('%s/../../../resources', __DIR__));
+
+        foreach ($dats as $dat) {
+            if (in_array($dat, ['.', '..'])) {
+                continue;
+            }
+
+            $datName = pathinfo($dat, PATHINFO_FILENAME);
+            $data = $this->datParser->parseDat($datName);
+            $dat = $this->datRepository->getByName($datName);
+
+            foreach ($data['game'] as $game) {
+                if ($game['rom']['@attributes']['crc'] === $crc) {
+                    $game['dat'] = $dat;
+
+                    return Game\Game::fromArray($this->buildArray($game));
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function getByMd5(string $md5): ?Game
+    {
+        $dats = scandir(sprintf('%s/../../../resources', __DIR__));
+
+        foreach ($dats as $dat) {
+            if (in_array($dat, ['.', '..'])) {
+                continue;
+            }
+
+            $datName = pathinfo($dat, PATHINFO_FILENAME);
+            $data = $this->datParser->parseDat($datName);
+            $dat = $this->datRepository->getByName($datName);
+
+            foreach ($data['game'] as $game) {
+                if ($game['rom']['@attributes']['md5'] === $md5) {
+                    $game['dat'] = $dat;
+
+                    return Game\Game::fromArray($this->buildArray($game));
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function getBySha1(string $sha1): ?Game
+    {
+        $dats = scandir(sprintf('%s/../../../resources', __DIR__));
+
+        foreach ($dats as $dat) {
+            if (in_array($dat, ['.', '..'])) {
+                continue;
+            }
+
+            $datName = pathinfo($dat, PATHINFO_FILENAME);
+            $data = $this->datParser->parseDat($datName);
+            $dat = $this->datRepository->getByName($datName);
+
+            foreach ($data['game'] as $game) {
+                if ($game['rom']['@attributes']['sha1'] === $sha1) {
+                    $game['dat'] = $dat;
+
+                    return Game\Game::fromArray($this->buildArray($game));
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function getBySerial(string $serial): ?Game
+    {
+        $dats = scandir(sprintf('%s/../../../resources', __DIR__));
+
+        foreach ($dats as $dat) {
+            if (in_array($dat, ['.', '..'])) {
+                continue;
+            }
+
+            $datName = pathinfo($dat, PATHINFO_FILENAME);
+            $data = $this->datParser->parseDat($datName);
+            $dat = $this->datRepository->getByName($datName);
+
+            foreach ($data['game'] as $game) {
+                if (isset($game['rom']['@attributes']['serial']) && $game['rom']['@attributes']['serial'] === $serial) {
+                    $game['dat'] = $dat;
+
+                    return Game\Game::fromArray($this->buildArray($game));
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function findByStatus(string $status): array
+    {
+        $result = [];
+
+        $dats = scandir(sprintf('%s/../../../resources', __DIR__));
+
+        foreach ($dats as $dat) {
+            if (in_array($dat, ['.', '..'])) {
+                continue;
+            }
+
+            $datName = pathinfo($dat, PATHINFO_FILENAME);
+            $data = $this->datParser->parseDat($datName);
+            $dat = $this->datRepository->getByName($datName);
+
+            foreach ($data['game'] as $game) {
+                if (isset($game['rom']['@attributes']['status']) && $game['rom']['@attributes']['status'] === $status) {
+                    $game['dat'] = $dat;
+
+                    $result[] = Game\Game::fromArray($this->buildArray($game));
+                }
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -87,12 +279,9 @@ final class GameRepository extends AbstractRepository implements GameRepositoryI
         $result = [];
 
         foreach ($data['game'] as $game) {
-            $result[] = Game\Game::fromArray([
-                'name' => $game['@attributes']['name'],
-                'description' => $game['description'],
-                'rom' => Rom::fromArray($game['rom']['@attributes']),
-                'dat' => $dat
-            ]);
+            $game['dat'] = $dat;
+
+            $result[] = Game\Game::fromArray($this->buildArray($game));
         }
 
         return $result;

@@ -2,3 +2,37 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
+
+$options = getopt('', [
+    'name:',
+    'size:',
+    'crc:',
+    'md5:',
+    'sha1:',
+    'serial:',
+    'status:',
+    'platform:'
+]);
+
+if (count($options) < 1) {
+    echo 'Usage: find-game --option=<value>' . PHP_EOL . PHP_EOL;
+    echo 'Available options are:' . PHP_EOL;
+    echo 'name' . PHP_EOL;
+    echo 'size' . PHP_EOL;
+    echo 'crc' . PHP_EOL;
+    echo 'md5' . PHP_EOL;
+    echo 'sha1' . PHP_EOL;
+    echo 'serial' . PHP_EOL;
+    echo 'status' . PHP_EOL;
+    echo 'platform' . PHP_EOL;
+}
+
+if (count($options) > 1) {
+    echo 'Please provide only one option at a time' . PHP_EOL;
+    exit();
+}
+
+$service = new \NoIntro\Service\GameService();
+$games = $service->findGamesForOptions($options);
+
+print_r($games);
