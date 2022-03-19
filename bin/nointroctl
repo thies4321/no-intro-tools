@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-// application.php
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -8,6 +7,7 @@ use Symfony\Component\Console\Application;
 
 $application = new Application();
 
-$application->add(new \NoIntro\Command\ListDatabases());
+$application->add(new \NoIntro\Command\Database\Get());
+$application->add(new \NoIntro\Command\Database\Show());
 
 $application->run();
