@@ -21,7 +21,7 @@ use function sprintf;
 )]
 final class Get extends DatabaseCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->addArgument('name', InputArgument::REQUIRED, 'Name of the database');
     }
