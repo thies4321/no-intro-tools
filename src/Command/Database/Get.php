@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function sprintf;
+use function strlen;
 
 #[AsCommand(
     name: 'database:get',
@@ -35,10 +36,12 @@ final class Get extends DatabaseCommand
         $dat = $this->datRepository->getByName($name);
 
         if (! $dat instanceof Dat) {
-            $output->writeln(sprintf('Database not found for name [%s]', $name));
+            $output->writeln(sprintf('<error>Database not found for name [%s]</error>', $name));
+            return Command::FAILURE;
         }
 
-        $mask = "|%10.10s | %-30.30s |\n";
+        $lineLength = $this->getLongestFieldLengthForDat($dat);
+        $mask = "| %8.8s | %-{$lineLength}.{$lineLength}s |\n";
         $output->writeln(sprintf('%s%s%s%s',
                 sprintf($mask, 'Name', $dat->getName()),
                 sprintf($mask, 'Version', $dat->getVersion()),

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NoIntro\Command\Game;
 
+use NoIntro\Exception\DatFileNotFound;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,7 +12,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function sprintf;
-use function strlen;
 
 #[AsCommand(
     name: 'game:find:name',
@@ -22,31 +22,34 @@ final class FindByName extends GameCommand
 {
     public function configure(): void
     {
-        $this->addArgument('name', InputArgument::REQUIRED, 'Name of the database');
+        $this->addArgument('name', InputArgument::REQUIRED, 'Name of the game');
     }
 
+    /**
+     * @throws DatFileNotFound
+     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getArgument('name');
         $games = $this->gameRepository->findByName($name);
 
         if (empty($games)) {
-            $output->writeln(sprintf('No games found for name [%s]', $name));
+            $output->writeln(sprintf('<error>No games found for name [%s]</error>', $name));
             return Command::INVALID;
         }
 
 
-        $length = 0;
+        $lineLength = 0;
 
         foreach ($games as $game) {
-            $checkLength = strlen($game->getRom()->getName());
+            $checkLength = $this->getLongestFieldLengthForGame($game);
 
-            if ($checkLength > $length) {
-                $length = $checkLength;
+            if ($checkLength > $lineLength) {
+                $lineLength = $checkLength;
             }
         }
 
-        $mask = "|%10.10s | %-{$length}.{$length}s |\n";
+        $mask = "| %11.11s | %-{$lineLength}.{$lineLength}s |\n";
 
         foreach ($games as $game) {
             $output->writeln(sprintf('%s%s%s%s%s%s%s%s',
