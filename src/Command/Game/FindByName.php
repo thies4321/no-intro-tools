@@ -52,7 +52,7 @@ final class FindByName extends GameCommand
         $mask = "| %11.11s | %-{$lineLength}.{$lineLength}s |\n";
 
         foreach ($games as $game) {
-            $output->writeln(sprintf('%s%s%s%s%s%s%s%s',
+            $output->writeln(sprintf('%s%s%s%s%s%s%s%s%s',
                     sprintf($mask, 'Name', $game->getName()),
                     sprintf($mask, 'Description', $game->getDescription()),
                     sprintf($mask, 'Filename', $game->getRom()->getName()),
@@ -60,7 +60,8 @@ final class FindByName extends GameCommand
                     sprintf($mask, 'MD5', $game->getRom()->getMd5()),
                     sprintf($mask, 'SHA1', $game->getRom()->getSha1()),
                     sprintf($mask, 'Serial', $game->getRom()->getSerial() ?? 'N/A'),
-                    sprintf($mask, 'Verified', $game->getRom()->isVerified() ? 'True' : 'False')
+                    sprintf($mask, 'Verified', $game->getRom()->isVerified() ? 'True' : 'False'),
+                    sprintf($mask, 'Database', sprintf('%s (%s)', $game->getDat()->getName(), $game->getDat()->getVersion()))
                 )
             );
         }

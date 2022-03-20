@@ -9,6 +9,7 @@ use NoIntro\Repository\GameRepository;
 use Symfony\Component\Console\Command\Command;
 
 use function max;
+use function sprintf;
 use function strlen;
 
 abstract class GameCommand extends Command
@@ -32,6 +33,7 @@ abstract class GameCommand extends Command
             strlen($game->getRom()->getMd5()),
             strlen($game->getRom()->getSha1()),
             strlen($game->getRom()->getSerial() ?? ''),
+            strlen(sprintf('%s (%s)', $game->getDat()->getName(), $game->getDat()->getVersion()))
         ]);
     }
 }
