@@ -22,4 +22,7 @@ $application->add(new \NoIntro\Command\Game\GetByMd5());
 $application->add(new \NoIntro\Command\Game\GetBySha1());
 $application->add(new \NoIntro\Command\Game\ShowVerified());
 
+// Rename commands
+$application->add(new \NoIntro\Command\Game\RenameDirectory());
+
 $application->run();
