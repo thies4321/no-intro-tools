@@ -17,5 +17,9 @@ $application->add(new \NoIntro\Command\Database\Show());
 $application->add(new \NoIntro\Command\Game\FindByName());
 $application->add(new \NoIntro\Command\Game\GetByName());
 $application->add(new \NoIntro\Command\Game\FindBySize());
+$application->add(new \NoIntro\Command\Game\GetByCrc());
+$application->add(new \NoIntro\Command\Game\GetByMd5());
+$application->add(new \NoIntro\Command\Game\GetBySha1());
+$application->add(new \NoIntro\Command\Game\ShowVerified());
 
 $application->run();

@@ -6,38 +6,24 @@ namespace NoIntro\Command\Game;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use function is_numeric;
+
 use function sprintf;
 
 #[AsCommand(
-    name: 'game:find:size',
-    description: 'Find games by size (bytes)',
+    name: 'game:show:verified',
+    description: 'Get game by sha1 hash',
     hidden: false
 )]
-final class FindBySize extends GameCommand
+final class ShowVerified extends GameCommand
 {
-    public function configure(): void
-    {
-        $this->addArgument('size', InputArgument::REQUIRED, 'Storage size of the games in bytes');
-    }
-
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $input = $input->getArgument('size');
-
-        if (! is_numeric($input)) {
-            $output->writeln('<error>Given size must be numeric</error>');
-            return Command::INVALID;
-        }
-
-        $size = (int) $input;
-        $games = $this->gameRepository->findBySize($size);
+        $games = $this->gameRepository->findByStatus('verified');
 
         if (empty($games)) {
-            $output->writeln(sprintf('<error>No games found for size [%d]</error>', $size));
+            $output->writeln('<error>No verified games found</error>');
             return Command::INVALID;
         }
 
