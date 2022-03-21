@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace NoIntro\Command\Game;
 
+use NoIntro\Config\ErrorCodes;
 use NoIntro\Exception\InvalidPath;
 use NoIntro\Repository\GameRepository;
 use NoIntro\Service\GameService;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function sleep;
 use function sprintf;
 use function ucfirst;
@@ -53,7 +55,14 @@ final class RenameDirectory extends GameCommand
         try {
             $result = $this->gameService->organiseDirectory($path, $commit);
         } catch (InvalidPath $exception) {
-            $output->writeln(sprintf('<error>[%s] is not a valid directory</error>', $path));
+            switch ($exception->getCode()) {
+                case ErrorCodes::INVALID_PATH_FOR_DIRECTORY:
+                    $output->writeln(sprintf('<error>[%s] is not a valid directory</error>', $path));
+                    break;
+                case ErrorCodes::DAT_NOT_FOUND_FOR_FILENAME:
+                    $output->writeln('<error>Something went wrong while renaming a file</error>');
+            }
+
             return Command::FAILURE;
         }
 

@@ -8,6 +8,7 @@ use NoIntro\Exception\InvalidPath;
 use NoIntro\Model\Game;
 use NoIntro\Repository\GameRepository;
 use function dirname;
+use function file_exists;
 use function in_array;
 use function is_dir;
 use function rename;
@@ -58,8 +59,15 @@ final class GameService
         return $result;
     }
 
+    /**
+     * @throws InvalidPath
+     */
     public function renameFile(string $path, bool $commit = false): bool
     {
+        if (! file_exists($path)) {
+            throw InvalidPath::forFile($path);
+        }
+
         $sha1 = sha1_file($path);
 
         $game = $this->gameRepository->getBySha1($sha1);
