@@ -7,6 +7,7 @@ namespace NoIntro\Command\Database;
 use NoIntro\Model\Dat;
 use NoIntro\Repository\DatRepository;
 use Symfony\Component\Console\Command\Command;
+
 use function max;
 use function strlen;
 

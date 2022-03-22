@@ -11,8 +11,6 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function sprintf;
-
 #[AsCommand(
     name: 'database:show',
     description: 'Show all no-intro databases',
