@@ -7,6 +7,7 @@ namespace NoIntro\Service;
 use NoIntro\Exception\InvalidPath;
 use NoIntro\Model\Game;
 use NoIntro\Repository\GameRepository;
+
 use function dirname;
 use function file_exists;
 use function in_array;
@@ -37,7 +38,7 @@ final class GameService
         $files = scandir($path);
 
         $result = [
-            'succes' => [],
+            'success' => [],
             'failed' => []
         ];
 
@@ -49,7 +50,7 @@ final class GameService
             $succes = $this->renameFile(sprintf('%s/%s', $path, $file), $commit);
 
             if ($succes === true) {
-                $result['succes'][] = $file;
+                $result['success'][] = $file;
                 continue;
             }
 

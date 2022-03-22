@@ -7,6 +7,7 @@ namespace NoIntro\Command\Database;
 use NoIntro\Exception\DatFileNotFound;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -31,26 +32,17 @@ final class Show extends DatabaseCommand
             return Command::FAILURE;
         }
 
-        $lineLength = 0;
-
         foreach ($dats as $dat) {
-            $checkLength = $this->getLongestFieldLengthForDat($dat);
-
-            if ($checkLength > $lineLength) {
-                $lineLength = $checkLength;
-            }
-        }
-
-        $mask = "| %8.8s | %-{$lineLength}.{$lineLength}s |\n";
-
-        foreach ($dats as $dat) {
-            $output->writeln(sprintf('%s%s%s%s',
-                    sprintf($mask, 'Name', $dat->getName()),
-                    sprintf($mask, 'Version', $dat->getVersion()),
-                    sprintf($mask, 'Homepage', $dat->getHomepage()),
-                    sprintf($mask, 'Url', $dat->getUrl())
-                )
-            );
+            $table = new Table($output);
+            $table
+                ->setHeaders(['Field', 'Value'])
+                ->setRows([
+                    ['Name', $dat->getName()],
+                    ['Version', $dat->getVersion()],
+                    ['Homepage', $dat->getHomepage()],
+                    ['Url', $dat->getUrl()]
+                ]);
+            $table->render();
         }
 
         return Command::SUCCESS;

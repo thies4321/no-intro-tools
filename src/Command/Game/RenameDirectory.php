@@ -78,6 +78,10 @@ final class RenameDirectory extends GameCommand
             }
         }
 
+        if ($commit === false) {
+            $output->writeln('<info>This was a test run. Provide commit to apply changes</info>');
+        }
+
         return Command::SUCCESS;
     }
 }

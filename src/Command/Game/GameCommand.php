@@ -22,18 +22,4 @@ abstract class GameCommand extends Command
 
         parent::__construct();
     }
-
-    protected function getLongestFieldLengthForGame(Game $game): int
-    {
-        return max([
-            strlen($game->getName()),
-            strlen($game->getDescription()),
-            strlen($game->getRom()->getName()),
-            strlen($game->getRom()->getCrc()),
-            strlen($game->getRom()->getMd5()),
-            strlen($game->getRom()->getSha1()),
-            strlen($game->getRom()->getSerial() ?? ''),
-            strlen(sprintf('%s (%s)', $game->getDat()->getName(), $game->getDat()->getVersion()))
-        ]);
-    }
 }
